@@ -25,14 +25,14 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 required">
+    <div class="col-md-4 required">
         <label for="validationCustom03" class="form-label">Username</label>
         <input type="text" class="form-control" value="{{ old('username', !empty($model->username) ? $model->username : '') }}" name="username" id="validationCustom03" required>
         <div class="invalid-feedback">
             Please provide a valid Username.
         </div>
     </div>
-    <div class="col-md-6 required">
+    <div class="col-md-4 required">
         <label for="validationCustom03" class="form-label">Password</label>
         <input type="text" class="form-control" value="{{ old('password', !empty($model->password) ? $model->password : '') }}" name="password" id="validationCustom03" required>
         <div class="invalid-feedback">
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="col-md-6 required">
+    <div class="col-md-4 required">
         <label for="validationCustom03" class="form-label">Encryption</label>
         <input type="text" class="form-control" value="{{ old('encryption', !empty($model->encryption) ? $model->encryption : '') }}" name="encryption" id="validationCustom03" required>
         <div class="invalid-feedback">
@@ -49,7 +49,7 @@
     </div>
 
 
-    <div class="col-md-6 required">
+    <div class="col-md-4 required">
         <label for="validationCustom03" class="form-label">From Address</label>
         <input type="text" class="form-control" value="{{ old('from_address', !empty($model->from_address) ? $model->from_address : '') }}" name="from_address" id="validationCustom03" required>
         <div class="invalid-feedback">
@@ -58,7 +58,7 @@
     </div>
 
 
-    <div class="col-md-6 required">
+    <div class="col-md-4 required">
         <label for="validationCustom03" class="form-label">From Name</label>
         <input type="text" class="form-control" value="{{env('APP_NAME', false)}}" disabled name="address" id="validationCustom03" required>
         <div class="invalid-feedback">

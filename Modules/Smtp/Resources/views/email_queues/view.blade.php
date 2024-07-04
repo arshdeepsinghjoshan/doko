@@ -1,10 +1,10 @@
 @extends('layouts.master')
 @section('content')
-    <?php
-    
-    use App\Models\User;
-    ?>
-    <x-a-breadcrumb :columns="[
+<?php
+
+use App\Models\User;
+?>
+<x-a-breadcrumb :columns="[
         [
             'url' => '/',
             'label' => 'Home',
@@ -16,16 +16,16 @@
         $model->subject,
     ]" />
 
-    <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="row">
-            <div class="col-lg-12 mb-4 order-0">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>{{ !empty($model->subject) ? (strlen($model->subject) > 100 ? substr($model->subject, 0, 100) . '...' : $model->subject) : 'N/A' }}
-                            <span class="{{ $model->getStateBadgeOption() }}">{{ $model->getState() }}</span>
-                        </h5>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="col-lg-12 mb-4 order-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5>{{ !empty($model->subject) ? (strlen($model->subject) > 100 ? substr($model->subject, 0, 100) . '...' : $model->subject) : 'N/A' }}
+                        <span class="{{ $model->getStateBadgeOption() }}">{{ $model->getState() }}</span>
+                    </h5>
 
-                        <x-a-detail-view :model="$model" :type="'double'" :column="[
+                    <x-a-detail-view :model="$model" :type="'double'" :column="[
                             'id',
                             'subject',
                             'from',
@@ -56,18 +56,18 @@
                                     : 'N/A',
                             ],
                         ]" />
-                        <iframe frameborder="0" src="{{env('APP_URL', false)}}/email-queue/email-verification/{{$model->model_id}}" width="100%" height="500px"></iframe>
+                    <iframe frameborder="0" srcdoc="{{ $model->content }}" width="100%" height="500px"></iframe>
 
-                    </div>
                 </div>
             </div>
         </div>
-
-
-        <x-a-user-action :model="$model" attribute="state_id" :states="$model->getStateOptions()" />
-
-
-
-
     </div>
+
+
+    <x-a-user-action :model="$model" attribute="state_id" :states="$model->getStateOptions()" />
+
+
+
+
+</div>
 @endsection

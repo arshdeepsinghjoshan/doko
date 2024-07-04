@@ -1,3 +1,5 @@
 {
-    "Smtp": true
+    "Smtp": true,
+    "Kyc": true,
+    "Comment": true
 }

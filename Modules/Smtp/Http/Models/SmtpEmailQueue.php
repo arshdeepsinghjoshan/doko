@@ -25,7 +25,10 @@ class SmtpEmailQueue extends Model
 
     protected $guarded = [''];
 
-
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'model_id');
+    }
     const STATE_PENDING = 0;
 
     const STATE_SENT = 1;

@@ -85,6 +85,8 @@
     <script src="{{ url('/assets/js/dashboards-analytics.js') }}"></script>
     <script src="{{ url('/js/state_change.js') }}"></script>
 
+  
+
     <script>
         $(".toggle-password").click(function() {
             $(this).toggleClass("fa-eye fa-eye-slash ");
@@ -94,6 +96,11 @@
         $(".toggle-password-confirm").click(function() {
             $(this).toggleClass("fa-eye fa-eye-slash ");
             $('#confirm_password').prop('type', $("#confirm_password").prop('type') == 'text' ? 'password' : 'text');
+        });
+
+        $(".toggle-old-password").click(function() {
+            $(this).toggleClass("fa-eye fa-eye-slash ");
+            $('#old_password').prop('type', $("#old_password").prop('type') == 'text' ? 'password' : 'text');
         });
     </script>
 </body>

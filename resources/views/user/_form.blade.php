@@ -41,18 +41,7 @@
                 <p style="color:red;">{{ $errors->first('email') }}</p>
             @enderror
         </div>
-        @if ($model->role_id != User::ROLE_ADMIN)
-            <div class="col-xl-4 col-lg-4 col-md-6 col-12">
-                <div class="mb-3 required">
-                    <label class="pt-2 fw-bold" for="btncheck1"> Referral Id </label>
-                    <input type="text" class="form-control d-block" name="referral_id"
-                        value="{{ old('referral_id', $model->referral_id) ?? Auth::user()->referral_id }}">
-                </div>
-                @error('referral_id')
-                    <p style="color:red;">{{ $errors->first('referral_id') }}</p>
-                @enderror
-            </div>
-        @endif
+      
 
 
         <div class="col-xl-4 col-lg-4 col-md-6 col-12">
@@ -67,16 +56,7 @@
         </div>
 
         @if (empty($model->exists))
-            <div class="col-xl-4 col-lg-4 col-md-6 col-12">
-                <div class="mb-3 required">
-                    <label class="pt-2 fw-bold" for="btncheck1"> Referrad Code </label>
-                    <input type="text" class="form-control d-block" name="referrad_code"
-                        value="{{ old('referrad_code', $model->referrad_code) ?? Auth::user()->referrad_code }}">
-                </div>
-                @error('referrad_code')
-                    <p style="color:red;">{{ $errors->first('referrad_code') }}</p>
-                @enderror
-            </div>
+           
 
             <div class="col-xl-4 col-lg-4 col-md-6 col-12">
                 <div class="position-relative">

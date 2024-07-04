@@ -47,6 +47,8 @@ $segment2 = request()->segment(2);
         </li>
         <!--End User Managment -->
 
+      
+
         @if (User::isAdmin())
         <!--Wallet Managment -->
         <li class="menu-item {{ $segment1 != 'wallet' ? '' : 'active open' }}">
@@ -100,34 +102,26 @@ $segment2 = request()->segment(2);
 
         <!-- Subscription Managment -->
 
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Subscription</span></li>
-        <li class="menu-item {{ $segment2 != 'plan' ? '' : 'active' }}">
-            <a href="{{ url('subscription/plan/') }}" class="menu-link">
+  <!-- Kyc Managment -->
+  <li class="menu-header small text-uppercase"><span class="menu-header-text">KYC Management</span></li>
+        <li class="menu-item {{ $segment1 == 'kyc' ? 'active' : '' }}">
+            <a href="{{ url('kyc') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Basic">Plans</div>
+                <div data-i18n="Basic">KYC</div>
             </a>
         </li>
-
-        <li class="menu-item {{ $segment2 != 'subscribed-plan' ? '' : 'active' }}">
-            <a href="{{ url('subscription/subscribed-plan') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-file"></i>
-                <div data-i18n="Basic">Subscribed Plans</div>
-            </a>
-        </li>
-
+        <!--End Kyc Managment -->
         <!--End Subscription Managment -->
-
-
-        <!-- Support Managment -->
-
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Support</span></li>
+        @if (User::isAdmin())
+        <!-- Support Managment -->
         <li class="menu-item {{ $segment1 == 'support' && $segment2 == 'department' ? 'active' : '' }}">
             <a href="{{ url('support/department') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Basic">Department</div>
             </a>
         </li>
-
+        @endif
         <li class="menu-item {{ $segment1 == 'support' && $segment2 != 'department' ? 'active' : '' }}">
             <a href="{{ url('support') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-file"></i>

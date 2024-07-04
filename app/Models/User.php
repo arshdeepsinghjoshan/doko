@@ -37,8 +37,25 @@ class User extends Authenticatable
 
     const EMAIL_VERIFIED = 1;
 
+    const EMAIL_NOT_VERIFIED = 0;
+
     const POSITION_MID = 2;
 
+    public function getEmail()
+    {
+        $list = self::getEmailOptions();
+        return isset($list[$this->email_verified]) ? $list[$this->email_verified] : 'Not Defined';
+    }
+    public static function getEmailOptions($id = null)
+    {
+        $list = array(
+            self::EMAIL_NOT_VERIFIED => "Not Verified",
+            self::EMAIL_VERIFIED => "Verified",
+        );
+        if ($id === null)
+            return $list;
+        return isset($list[$id]) ? $list[$id] : 'Not Defined';
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -172,7 +189,10 @@ class User extends Authenticatable
     }
 
 
-
+    public static function isGuest()
+    {
+        return Auth::guest();
+    }
 
 
     public static function isAdmin()

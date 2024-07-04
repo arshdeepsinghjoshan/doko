@@ -33,7 +33,6 @@
                                 'port',
                                 'username',
                                 'encryption',
-                                'from_address',
                                 'created_at',
                                 'status',
                                 'created_by',

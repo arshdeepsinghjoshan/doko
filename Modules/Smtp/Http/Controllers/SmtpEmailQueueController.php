@@ -38,16 +38,20 @@ class SmtpEmailQueueController extends Controller
             ->addIndexColumn()
             ->addColumn('status', function ($data) {
                 return $data->getState();
-            })  ->addColumn('created_by', function ($data) {
+            })->addColumn('created_by', function ($data) {
                 return !empty($data->createdBy && $data->createdBy->name) ? $data->createdBy->name : 'N/A';
             })
-           
-                ->addColumn('action', function ($data) {
-                    $html = '<div class="table-actions text-center">';
-                    $html .=    '  <a class="btn btn-icon btn-primary mt-1" href="' . url('email-queue/view/' . $data->id) . '"  ><i class="fa fa-eye
+            ->addColumn('created_at', function ($data) {
+                return (empty($data->created_at)) ? 'N/A' : date('Y-m-d', strtotime($data->created_at));
+            })
+
+
+            ->addColumn('action', function ($data) {
+                $html = '<div class="table-actions text-center">';
+                $html .=    '  <a class="btn btn-icon btn-primary mt-1" href="' . url('email-queue/view/' . $data->id) . '"  ><i class="fa fa-eye
                             "data-toggle="tooltip"  title="View"></i></a>';
-                    $html .=  '</div>';
-                    return $html;
+                $html .=  '</div>';
+                return $html;
             })->addColumn('customerClickAble', function ($data) {
                 $html = 0;
                 return $html;
@@ -101,7 +105,7 @@ class SmtpEmailQueueController extends Controller
     {
         // self::validator($request)->validate();
         $data = self::create($request);
-        return true;
+        return $data;
     }
 
     public function view(Request $request, $id)

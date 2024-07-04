@@ -45,6 +45,28 @@ class Support extends Model
         ];
     }
 
+    public static function getStateOptionsBadge($stateValue)
+    {
+        $list = [
+            self::STATE_PENDING => "btn btn-primary",
+            self::STATE_COMPLETE => "btn btn-primary",
+            self::STATE_HOLD => "btn btn-danger",
+            self::STATE_INPROGRESS => "btn btn-primary",
+
+        ];
+        return isset($stateValue) ? $list[$stateValue] : 'Not Defined';
+    }
+    public function getStateButtonOption($state_id = null)
+    {
+        $list = [
+            self::STATE_COMPLETE => "success",
+            self::STATE_PENDING => "secondary",
+            self::STATE_HOLD => "danger",
+            self::STATE_INPROGRESS => "secondary",
+
+        ];
+        return isset($list[$state_id]) ? 'btn btn-' . $list[$state_id] : 'Not Defined';
+    }
     public function getState()
     {
         $list = self::getStateOptions();

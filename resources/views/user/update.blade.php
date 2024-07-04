@@ -29,7 +29,6 @@
                     </div>
                     <div class="card-body">
                         @include('user._form')
-
                     </div>
                 </div>
             </div>

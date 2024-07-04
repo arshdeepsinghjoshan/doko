@@ -28,6 +28,19 @@ class UserController extends Controller
             return redirect('user')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
+
+    public function forgetPassword()
+    {
+        if (!User::isGuest()) {
+            return redirect('/')->with('error', "You are not allowed to perform this action.");
+        }
+        try {
+            $model = new User();
+            return view('user.forget_password', compact('model'));
+        } catch (\Exception $e) {
+            return redirect('user')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
     public function create(Request $request)
     {
         try {
@@ -76,9 +89,14 @@ class UserController extends Controller
             }
             $model   = $request->model_type::find($request->model_id);
             if ($model) {
-                $update = $model->update([
-                    $request->attribute => $request->workflow,
-                ]);
+                if (method_exists($model, 'stateChange')) {
+                    $model->state_id =  $request->workflow;
+                    $model->stateChange();
+                } else {
+                    $update = $model->update([
+                        $request->attribute => $request->workflow,
+                    ]);
+                }
                 $successMessage = preg_replace('/(?<!\s)[A-Z]/', ' $0', class_basename($model)) . ' has been ' . $model->getState() . '!';
                 if ($request->ajax()) {
                     return response()->json(['status' => 200, 'message' => $successMessage]);
@@ -297,7 +315,6 @@ class UserController extends Controller
             $rules = array_merge($rules, [
                 "password" => "required|string|min:4",
                 "confirm_password" => "required|same:password",
-                "referrad_code" => "required|exists:users,referral_id",
 
             ]);
         }
@@ -313,17 +330,11 @@ class UserController extends Controller
                 return redirect()->back()->withInput()->with('error', $message);
             }
             $model = new User();
-            $userGet = User::where('referral_id', $request->referrad_code)->first();
-            if (!$userGet) {
-                return redirect('/')->with('error', 'Invalid Code!');
-            }
-            $model->referrad_code = $userGet->referrad_code;
             $model->fill($request->all());
             $model->generateReferralCode();
             $model->role_id = User::ROLE_USER;
             $model->state_id = User::STATE_ACTIVE;
             $model->created_by_id = Auth::id();
-            $model->parent_id = $userGet->id;
             $model->password = Hash::make($request->password);
             if ($request->profile_image) {
                 $model->profile_image = $this->imageUpload($request, "profile_image", '/public/uploads');
@@ -374,6 +385,9 @@ class UserController extends Controller
 
     public function confirmEmail(Request $request, $activationId)
     {
+        if (!User::isGuest()) {
+            return redirect('/')->with('error', "You are not allowed to perform this action.");
+        }
         try {
             if ($activationId) {
                 $model  = User::where('activation_key', $activationId)->first();
@@ -411,8 +425,8 @@ class UserController extends Controller
                 return redirect()->back()->withInput()->with('error', $message);
             }
             $model = User::where('activation_key', $request->activation_key)->where('otp_email', $request->otp)
-            ->where('email', $request->email)
-            ->first();
+                ->where('email', $request->email)
+                ->first();
             if ($model) {
                 $model->otp_email = null;
                 $model->generateActivationkey();
@@ -535,5 +549,78 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return redirect('/')->with('error', 'An error occurred: ' . $e->getMessage());
         }
+    }
+
+
+    protected static function forgetPasswordValidator(array $data, $id = null)
+    {
+        $rules = [
+            "email" => "required|email",
+            "password" => "required|string|min:4",
+            "confirm_password" => "required|same:password",
+
+        ];
+        return Validator::make($data, $rules);
+    }
+
+    public function forgetPasswordCheck(Request $request)
+    {
+        try {
+            if ($this->forgetPasswordValidator($request->all())->fails()) {
+                $message = $this->forgetPasswordValidator($request->all())->messages()->first();
+                return redirect()->back()->withInput()->with('error', $message);
+            }
+            $model = User::findActive()->where('email', $request->email)->first();
+            if (!$model) {
+                return redirect()->back()->withInput()->with('error', 'Please enter valid email address..');
+            }
+            $model->fill($request->all());
+            $model->generateEmailOtp();
+            $model->state_id = User::STATE_INACTIVE;
+            $model->generateActivationkey();
+            $model->password = Hash::make($request->password);
+            if ($model->save()) {
+                $model->sendRegistrationMailtoUser();
+                return redirect('/user/confirm-email/' . $model->activation_key)->with('success', 'Please verify your email address!');
+            } else {
+                DB::rollBack();
+                return redirect('/user')->with('error', 'Unable to save the User!');
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
+    }
+
+    public function changePassword()
+    {
+        try {
+            $model = new User();
+            return view('user.change_password', compact('model'));
+        } catch (\Exception $e) {
+            return redirect('/')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $model = Auth::user();
+        // Validate inputs
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => 'required|min:8|different:old_password',
+            'confirm_password' => 'required|same:new_password',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        // Check if the old password matches
+        if (!Hash::check($request->old_password, $model->password)) {
+            return redirect()->back()->withErrors(['old_password' => 'The old password is incorrect.'])->withInput();
+        }
+        // Update password
+        $model->password = Hash::make($request->new_password);
+        $model->save();
+        return redirect('/user/view/' . $model->id)->with('success', 'Password changed successfully.');
     }
 }

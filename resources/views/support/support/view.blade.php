@@ -58,6 +58,7 @@ use App\Models\User;
         </div>
     </div>
 
+    <x-a-user-action :model="$model" attribute="state_id" :states="$model->getStateOptions()" />
 
 
 </div>

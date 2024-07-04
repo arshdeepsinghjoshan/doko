@@ -24,22 +24,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [SiteController::class, 'index']);
+// Route::get('/', [SiteController::class, 'index']);
+Route::get('/', [AuthController::class, 'login'])->name('login');
 Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::get('forget-password', [UserController::class, 'forgetPassword']);
+Route::post('forget-password', [UserController::class, 'forgetPasswordCheck'])->name('forget.password');
 Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/registration', [AuthController::class, 'registration'])->name('add.registration');
-
 Route::get('/user/confirm-email/{activation_key?}', [UserController::class, 'confirmEmail']);
 Route::post('/user/confirm-email/{activation_key}', [UserController::class, 'EmailConfirm'])->name('confirm.email');
-
-
-
 Route::group(['middleware' => 'prevent-back-history'], function () {
 
     Route::group(['middleware' => ['auth', 'active']], function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+        Route::get('/user/change-password', [UserController::class, 'changePassword']);
+        Route::post('/user/update-password', [UserController::class, 'updatePassword'])->name('password.update');;
 
         Route::get('user/create', [UserController::class, 'create']);
         Route::get('user/{role_id?}', [UserController::class, 'index']);

@@ -6,9 +6,9 @@
 </head>
 
 <body>
-    <h1>New User Registration</h1>
-    <p>A new user has registered with the following details:</p>
+    <h1>Your verification code.</h1>
     <p>Name: {{ $model->name }}</p>
     <p>Email Otp : {{ $model->otp_email }}</p>
+    <p>Link : {{ url("/user/confirm-email/" . $model->activation_key) }}</p>
 </body>
 </html>

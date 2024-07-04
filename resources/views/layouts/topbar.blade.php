@@ -31,7 +31,7 @@
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar avatar-online">
-                                        <img src="{{ asset(Auth::user()->profile_image ? 'assets/uploads/' . Auth::user()->profile_image : 'assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                        <img src="{{ asset(Auth::user()->profile_image ? '/uploads/' . Auth::user()->profile_image : 'assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle" />
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
@@ -57,6 +57,14 @@
                         </a>
                     </li>
                     <li>
+                        <a class="dropdown-item" href="{{url('user/change-password')}}">
+                            <span class="d-flex align-items-center align-middle">
+                                <i class="flex-shrink-0 bx bx-lock me-2"></i>
+                                <span class="flex-grow-1 align-middle">Change Password</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
                         <a class="dropdown-item" href="{{url('wallet/view/'.(isset(Auth::user()->wallet) && isset(Auth::user()->wallet->wallet_number) ? Auth::user()->wallet->id : 'null'))}}">
                             <span class="d-flex align-items-center align-middle">
                                 <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
@@ -64,6 +72,8 @@
                             </span>
                         </a>
                     </li>
+
+
                     <li>
                         <div class="dropdown-divider"></div>
                     </li>

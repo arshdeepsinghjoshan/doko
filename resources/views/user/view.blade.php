@@ -49,8 +49,6 @@ use App\Models\User;
                                     'id',
                                     'email',
                                     'name',
-                                    'referral_id',
-                                    'referrad_code',
                                     [
                                         'attribute' => 'role_id',
                                         'label' => 'Role',
@@ -58,10 +56,10 @@ use App\Models\User;
                                         'visible' => true,
                                     ],
                                     [
-                                        'attribute' => 'invest',
-                                        'label' => 'Total Investment',
-                                        'value' => $model->getTotalSubscribedPlanAmount(),
-                                        'visible' => !($model->role_id == User::ROLE_ADMIN),
+                                        'attribute' => 'email_verified',
+                                        'label' => 'Email Verified',
+                                        'value' => $model->getEmail(),
+                                        'visible' => true,
                                     ],
                                     [
                                         'attribute' => 'created_at',
